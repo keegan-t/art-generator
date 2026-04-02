@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abstract Art Gallery</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/x-icon" href="assets/preview.png">
+</head>
+<body>
+
+<!-- Gallery View -->
+<div id="gallery-view">
+    <header class="app-header">
+        <h1 class="app-title">Abstract Art Gallery</h1>
+        <button id="clear-btn">Clear All</button>
+    </header>
+    <div id="gallery-list"></div>
+    <button id="new-btn">New</button>
+</div>
+
+<!-- Editor View -->
+<div id="editor-view" class="hidden">
+    <div class="preview-area">
+        <canvas id="preview-canvas"></canvas>
+    </div>
+    <aside class="editor-panel">
+        <div class="panel-header">
+            <span class="panel-title">Parameters</span>
+            <button id="randomize-btn">Randomize All</button>
+        </div>
+        <div class="panel-controls">
+            <div class="text-fields">
+                <div class="control-field">
+                    <label class="field-label">Title</label>
+                    <input id="title-input" type="text" class="input" placeholder="Untitled" autocomplete="off">
+                </div>
+                <div class="control-field">
+                    <div class="field-header">
+                        <label class="field-label">Seed</label>
+                        <button class="lock-btn" data-param="seed">🔓</button>
+                    </div>
+                    <div class="seed-row">
+                        <input id="seed-input" type="text" class="input seed-input" maxlength="5" autocomplete="off">
+                        <button id="random-seed-btn" title="New seed">🎲</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="slider-field">
+                <div class="slider-header">
+                    <span class="slider-label">Color Palette</span>
+                    <div class="slider-right">
+                        <span class="slider-value" id="palette-label"></span>
+                        <button class="lock-btn" data-param="palette">🔓</button>
+                    </div>
+                </div>
+                <input type="range" id="palette-slider" min="0" max="15" step="1" value="0">
+            </div>
+
+            <div class="slider-field">
+                <div class="slider-header">
+                    <span class="slider-label">Shape</span>
+                    <div class="slider-right">
+                        <span class="slider-value" id="shape-label"></span>
+                        <button class="lock-btn" data-param="shape">🔓</button>
+                    </div>
+                </div>
+                <input type="range" id="shape-slider" min="0" max="6" step="1" value="0">
+            </div>
+
+            <div class="slider-field">
+                <div class="slider-header">
+                    <span class="slider-label">Complexity</span>
+                    <div class="slider-right">
+                        <span class="slider-value" id="complexity-label"></span>
+                        <button class="lock-btn" data-param="complexity">🔓</button>
+                    </div>
+                </div>
+                <input type="range" id="complexity-slider" min="1" max="10" step="1" value="5">
+            </div>
+
+            <div class="slider-field">
+                <div class="slider-header">
+                    <span class="slider-label">Symmetry Axes</span>
+                    <div class="slider-right">
+                        <span class="slider-value" id="symmetry-label"></span>
+                        <button class="lock-btn" data-param="symmetry">🔓</button>
+                    </div>
+                </div>
+                <input type="range" id="symmetry-slider" min="0" max="6" step="1" value="0">
+            </div>
+
+            <div class="slider-field">
+                <div class="slider-header">
+                    <span class="slider-label">Blend Mode</span>
+                    <div class="slider-right">
+                        <span class="slider-value" id="blend-label"></span>
+                        <button class="lock-btn" data-param="blend">🔓</button>
+                    </div>
+                </div>
+                <input type="range" id="blend-slider" min="0" max="10" step="1" value="0">
+            </div>
+
+            <div class="slider-field">
+                <div class="slider-header">
+                    <span class="slider-label">Scale</span>
+                    <div class="slider-right">
+                        <span class="slider-value" id="scale-label"></span>
+                        <button class="lock-btn" data-param="scale">🔓</button>
+                    </div>
+                </div>
+                <input type="range" id="scale-slider" min="10" max="30" step="1" value="10">
+            </div>
+
+            <div class="slider-field">
+                <div class="slider-header">
+                    <span class="slider-label">Rotation</span>
+                    <div class="slider-right">
+                        <span class="slider-value" id="rotation-label"></span>
+                        <button class="lock-btn" data-param="rotation">🔓</button>
+                    </div>
+                </div>
+                <input type="range" id="rotation-slider" min="0" max="23" step="1" value="0">
+            </div>
+        </div>
+        <div class="panel-footer">
+            <button id="save-btn">Save</button>
+            <button id="download-btn" class="default-btn">Download</button>
+            <button id="cancel-btn" class="default-btn">Cancel</button>
+        </div>
+    </aside>
+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,525 @@
+/* === General === */
+
+:root {
+    --bg: #090909;
+    --surface: #111111;
+    --surface-2: #181818;
+    --surface-3: #272727;
+    --text: #fafafa;
+    --text-2: #a1a1a1;
+    --text-3: #525252;
+    --border: rgba(255, 255, 255, 0.1);
+    --primary: #0094FF;
+    --primary-faded: rgba(0, 148, 255, 0.2);
+    --danger: #dc3545;
+    --danger-faded: rgba(255, 127, 127, 0.2);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Inter", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* === Gallery View === */
+
+#gallery-list {
+    margin: 40px;
+}
+
+/* Header */
+
+.app-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 20px;
+    border-bottom: 1px solid var(--border);
+    background: #111111;
+}
+
+/* Body */
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 250px);
+    gap: 40px;
+    margin: 0 auto;
+    max-width: 1400px;
+    justify-content: center;
+}
+
+/* Empty gallery */
+
+.empty-state {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    inset: 0;
+    gap: 10px;
+    pointer-events: none;
+}
+
+.empty-state .empty-title {
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--text-3);
+}
+
+.empty-state .empty-sub {
+    font-size: 18px;
+    color: #353535;
+}
+
+/* Cards */
+
+.card {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    background: #181818;
+    border: 1px solid var(--border);
+    transition: 0.2s;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.card-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.card-overlay {
+    position: absolute;
+    inset: auto 0 0;
+    padding: 40px 20px 20px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, transparent 100%);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    opacity: 0;
+    transition: 0.2s ease;
+}
+
+.card:hover .card-overlay {
+    opacity: 1;
+}
+
+.card-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-date {
+    font-size: 12px;
+    color: #888;
+}
+
+.card-delete {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    height: 32px;
+    width: 32px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid var(--border);
+    color: var(--danger);
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: 0.2s;
+}
+
+.card:hover .card-delete {
+    opacity: 1;
+}
+
+.card-delete:hover {
+    background: var(--danger-faded);
+}
+
+/* New button */
+
+#new-btn {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    height: 50px;
+    padding: 0 30px;
+    border-radius: 100px;
+    background: linear-gradient(135deg, var(--primary) 0%, #B200FF 100%);
+    color: white;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: box-shadow 0.2s ease, transform 0.2s ease, filter 0.2s ease;
+}
+
+#new-btn:hover {
+    box-shadow: 0 0 20px var(--primary);
+    filter: brightness(1.1);
+    transform: scale(1.05);
+}
+
+/* Clear all button */
+
+#clear-btn {
+    background: transparent;
+    color: var(--danger);
+    border: 2px solid var(--danger-faded);
+    border-radius: 10px;
+    padding: 10px 15px;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+#clear-btn:hover {
+    background: rgba(255, 127, 127, 0.1);
+    border-color: rgba(255, 127, 127, 0.4);
+}
+
+/* === Editor View === */
+
+#editor-view {
+    display: grid;
+    grid-template-columns: 2fr 1.25fr;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Canvas area */
+
+.preview-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg);
+    position: relative;
+    overflow: hidden;
+}
+
+#preview-canvas {
+    display: block;
+    width: min(calc(100% - 64px), calc(100dvh - 64px), 1024px);
+    aspect-ratio: 1;
+}
+
+/* Right panel */
+
+.editor-panel {
+    background: var(--surface);
+    border-left: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.panel-header {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+}
+
+.panel-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-2);
+}
+
+#randomize-btn {
+    background: transparent;
+    color: var(--primary);
+    border: 2px solid var(--primary-faded);
+    border-radius: 10px;
+    padding: 10px 15px;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+#randomize-btn:hover {
+    background: rgba(0, 148, 255, 0.1);
+    border-color: rgba(0, 148, 255, 0.4);
+}
+
+.panel-controls {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.panel-footer {
+    padding: 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+}
+
+/* Fields */
+
+.control-field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.field-label {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-2);
+    user-select: none;
+}
+
+.input {
+    background: var(--surface-2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px;
+    font-family: inherit;
+    font-size: 16px;
+    outline: none;
+    width: 100%;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.input::placeholder {
+    color: var(--text-3);
+}
+
+.input:focus {
+    background: var(--surface-3);
+}
+
+.text-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.seed-row {
+    display: flex;
+    gap: 10px;
+}
+
+.seed-input {
+    flex: 1;
+    min-width: 0;
+}
+
+#random-seed-btn {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+#random-seed-btn:hover {
+    background: var(--surface-3);
+}
+
+/* Divider */
+
+.divider {
+    height: 1px;
+    background: var(--border);
+    margin: 0 -20px;
+}
+
+/* Sliders */
+
+.slider-field {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.slider-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+}
+
+.slider-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.field-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.slider-label {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-2);
+}
+
+.slider-value {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--primary);
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #40aeff;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border: none;
+    border-radius: 50%;
+    background: #40aeff;
+    cursor: pointer;
+}
+
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 3px;
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+    background: var(--surface-3);
+}
+
+/* Locked elements */
+
+.lock-btn {
+    background: transparent;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    opacity: 0.5;
+    transition: opacity 0.1s ease;
+    flex-shrink: 0;
+}
+
+.lock-btn:hover,
+.lock-btn.locked {
+    opacity: 1;
+}
+
+.slider-field.locked .slider-label,
+.slider-field.locked .slider-value {
+    opacity: 0.3;
+}
+
+.slider-field.locked input[type="range"] {
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.control-field.locked .field-label {
+    opacity: 0.3;
+}
+
+.control-field.locked .seed-input {
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.control-field.locked #seed-randomize-btn {
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+/* Buttons */
+
+#save-btn {
+    flex: 2;
+    background: linear-gradient(135deg, var(--primary) 0%, #B200FF 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+#save-btn:hover {
+    filter: brightness(1.1);
+    transform: scale(1.05);
+}
+
+.default-btn {
+    flex: 1;
+    background: transparent;
+    color: var(--text-3);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 10px;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.default-btn:hover {
+    background: var(--surface-2);
+    color: var(--text);
+}
