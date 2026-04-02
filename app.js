@@ -308,9 +308,17 @@ document.getElementById("save-btn").addEventListener("click", () => {
 });
 
 document.getElementById("download-btn").addEventListener("click", () => {
+    const composite = document.createElement("canvas");
+    composite.width = previewCanvas.width;
+    composite.height = previewCanvas.height;
+    const ctx = composite.getContext("2d");
+    ctx.fillStyle = "#090909";
+    ctx.fillRect(0, 0, composite.width, composite.height);
+    ctx.drawImage(previewCanvas, 0, 0);
+
     const link = document.createElement("a");
     link.download = `${params.title || "artwork"}.png`;
-    link.href = previewCanvas.toDataURL("image/png");
+    link.href = composite.toDataURL("image/png");
     link.click();
 });
 
