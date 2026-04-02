@@ -288,33 +288,42 @@ export function drawArtwork(canvas, {
     const colors = PALETTES[palette];
     const shapes = generators[shape](rng, complexity * 8);
 
-    ctx.fillStyle = BACKGROUNDS[palette];
-    ctx.fillRect(0, 0, SIZE, SIZE);
+    // Draw to an offscreen canvas first to handle transparent pixels
+    const offscreen = document.createElement("canvas");
+    offscreen.width = SIZE;
+    offscreen.height = SIZE;
+    const off = offscreen.getContext("2d");
 
-    ctx.save();
-    ctx.translate(SIZE / 2, SIZE / 2);
-    ctx.rotate(rotation);
-    ctx.scale(scale, scale);
-    ctx.globalCompositeOperation = blendMode;
+    off.fillStyle = BACKGROUNDS[palette];
+    off.fillRect(0, 0, SIZE, SIZE);
+
+    off.save();
+    off.translate(SIZE / 2, SIZE / 2);
+    off.rotate(rotation);
+    off.scale(scale, scale);
+    off.globalCompositeOperation = blendMode;
 
     if (symmetry === 0) {
-        drawShapes(ctx, shape, shapes, colors);
+        drawShapes(off, shape, shapes, colors);
     } else {
         for (let i = 0; i < symmetry; i++) {
             const angle = (Math.PI * 2 / symmetry) * i;
-            ctx.save();
-            ctx.rotate(angle);
-            drawShapes(ctx, shape, shapes, colors);
-            ctx.restore();
+            off.save();
+            off.rotate(angle);
+            drawShapes(off, shape, shapes, colors);
+            off.restore();
 
-            ctx.save();
-            ctx.rotate(angle);
-            ctx.scale(-1, 1);
-            drawShapes(ctx, shape, shapes, colors);
-            ctx.restore();
+            off.save();
+            off.rotate(angle);
+            off.scale(-1, 1);
+            drawShapes(off, shape, shapes, colors);
+            off.restore();
         }
     }
 
-    ctx.restore();
-    ctx.globalAlpha = 1;
+    off.restore();
+
+    ctx.fillStyle = "#090909";
+    ctx.fillRect(0, 0, SIZE, SIZE);
+    ctx.drawImage(offscreen, 0, 0);
 }
