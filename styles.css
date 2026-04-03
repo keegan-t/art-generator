@@ -246,6 +246,31 @@ body {
     overflow: hidden;
 }
 
+/* Responsive layout */
+
+@media (max-width: 700px) {
+    #editor-view {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+        height: 100dvh;
+        overflow: hidden;
+    }
+
+    .preview-area {
+        padding: 20px;
+    }
+
+    #preview-canvas {
+        width: min(calc(100% - 40px), 50dvh);
+    }
+
+    .editor-panel {
+        border-left: none;
+        border-top: 1px solid var(--border);
+        overflow: hidden;
+    }
+}
+
 .panel-header {
     padding: 20px;
     display: flex;
