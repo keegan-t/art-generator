@@ -2,7 +2,7 @@
 
 A browser-based generative art tool. Experiment with palettes, shapes, and other parameters to create and save unique abstract artworks.
 
-**[Try it on GitHub Pages →](https://keegan-t.github.io/art-generator)**
+**[Try it on keegant.dev →](https://art.keegant.dev)**
 
 ## Features
 
