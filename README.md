@@ -1,4 +1,4 @@
-# <img src="/assets/preview.png" width="40" align="center"> Abstract Art Generator
+# <img src="/assets/preview.png" height="40" align="top" alt=""> Abstract Art Generator
 
 A browser-based generative art tool. Experiment with palettes, shapes, and other parameters to create and save unique abstract artworks.
 
